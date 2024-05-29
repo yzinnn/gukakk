@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>리듬 게임</title>
+    <title>육보 리듬 게임</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -11,38 +11,56 @@
         }
         .instrument {
             display: inline-block;
-            margin: 10px;
+            margin: 0;
             position: relative;
+            text-align: right; /* 오른쪽으로 정렬 */
         }
         .instrument img {
-            width: 100px;
-            height: 100px;
+            width: 80px;
+            height: 80px;
             cursor: pointer;
         }
         .note {
             position: absolute;
-            width: 50px;
-            height: 50px;
+            width: 80px;
+            height: 80px;
         }
         #inputForm {
-            margin-bottom: 20px;
+            margin-bottom: 10px;
+        }
+        #rythmInput {
+            height: auto;
+            overflow: auto;
         }
         #gameCanvas {
             border: 1px solid #000;
             display: block;
             margin: 0 auto;
             position: relative;
+            width: 320px;
+            height: 360px;
         }
         #instrumentContainer {
             display: flex;
             justify-content: center;
-            position: relative;
-            margin-top: 20px;
+            align-items: center;
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 120px;
+            top: 240px;
         }
         .instrument {
             display: flex;
             flex-direction: column;
-            align-items: center;
+            align-items: center; /* 오른쪽 정렬 */
+        }
+        #score {
+            margin-top: 5px;
+            font-size: 18px;
+        }
+        h1 {
+            font-size: 20px;
         }
     </style>
 </head>
@@ -53,7 +71,7 @@
         <input type="text" id="rythmInput" placeholder="예: 갠 지 덩 쿵 덕">
         <button onclick="startGame()">시작</button>
     </div>
-    <canvas id="gameCanvas" width="800" height="600"></canvas>
+    <canvas id="gameCanvas" width="320" height="480"></canvas>
     <div id="instrumentContainer">
         <div class="instrument" id="kkwaenggari">
             <img src="Kkwaenggwari.jpg" alt="꽹가리">
@@ -73,16 +91,16 @@
         </div>
     </div>
     <p id="score">점수: 0</p>
-    <audio id="audio_kkwaenggwari_gan" src="/mnt/data/Kkwaenggwari_gang_1.mp3" preload="auto"></audio>
-    <audio id="audio_kkwaenggwari_ji" src="/mnt/data/Kkwaenggwari_ji_1.mp3" preload="auto"></audio>
-    <audio id="audio_jing_jing" src="/mnt/data/Jing_1.mp3" preload="auto"></audio>
-    <audio id="audio_buk_dung" src="/mnt/data/buk_dung.mp3" preload="auto"></audio>
-    <audio id="audio_buk_du" src="/mnt/data/buk_du.mp3" preload="auto"></audio>
-    <audio id="audio_janggu_dung" src="/mnt/data/Janggu_dung_1.mp3" preload="auto"></audio>
-    <audio id="audio_janggu_giduk" src="/mnt/data/Janggu_giduk_1.mp3" preload="auto"></audio>
-    <audio id="audio_janggu_kung" src="/mnt/data/Janggu_kung_1.mp3" preload="auto"></audio>
-    <audio id="audio_janggu_durururu" src="/mnt/data/Janggu_durururu_1.mp3" preload="auto"></audio>
-    <audio id="audio_janggu_duk" src="/mnt/data/Janggu_duk_1.mp3" preload="auto"></audio>
+    <audio id="audio_kkwaenggwari_gan" src="Kkwaenggwari_gang_1.mp3" preload="auto"></audio>
+    <audio id="audio_kkwaenggwari_ji" src="Kkwaenggwari_ji_1.mp3" preload="auto"></audio>
+    <audio id="audio_jing_jing" src="jing_1.mp3" preload="auto"></audio>
+    <audio id="audio_buk_dung" src="buk_dung.mp3" preload="auto"></audio>
+    <audio id="audio_buk_du" src="buk_du.mp3" preload="auto"></audio>
+    <audio id="audio_janggu_dung" src="Janggu_dung_1.mp3" preload="auto"></audio>
+    <audio id="audio_janggu_giduk" src="Janggu_giduk_1.mp3" preload="auto"></audio>
+    <audio id="audio_janggu_kung" src="Janggu_kung_1.mp3" preload="auto"></audio>
+    <audio id="audio_janggu_durururu" src="Janggu_durururu_1.mp3" preload="auto"></audio>
+    <audio id="audio_janggu_duk" src="Janggu_duk_1.mp3" preload="auto"></audio>
     <script>
         const instrumentSounds = {
             kkwaenggari: {
@@ -105,7 +123,7 @@
             }
         };
 
-        const instrumentElements = document.querySelectorAll('.instrument img');
+        const instrumentElements = document.querySelectorAll('.instrument');
         const instrumentIds = ['kkwaenggari', 'jing', 'buk', 'janggu'];
 
         let score = 0;
@@ -115,12 +133,19 @@
         const ctx = canvas.getContext('2d');
         let gameInterval;
 
+        instrumentElements.forEach(inst => {
+            inst.addEventListener('click', () => {
+                const id = inst.id;
+                checkHit(id);
+            });
+        });
+
         function startGame() {
             userInput = document.getElementById('rythmInput').value.split(' ');
             notes = userInput.map((note, index) => {
                 const instrument = noteToInstrument(note);
-                const x = instrumentIds.indexOf(instrument) * 200 + 50;
-                return { x: x, y: -50 * (index + 1), id: instrument, text: note };
+                const x = instrumentIds.indexOf(instrument) * 80;
+                return { x: x, y: -80 * (index + 1), id: instrument, text: note };
             });
             score = 0;
             document.getElementById('score').textContent = '점수: ' + score;
@@ -149,13 +174,13 @@
         function drawNotes() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctx.fillStyle = 'black';
-            ctx.fillRect(0, 550, canvas.width, 10);  // 타점 선을 굵게 설정
+            ctx.fillRect(0, 410, canvas.width, 10);  // 타점 선을 그림 위로 0.7cm 이동
             notes.forEach(note => {
                 note.y += 2;
                 ctx.fillStyle = noteColor(note.id);
-                ctx.fillRect(note.x, note.y, 50, 50);
+                ctx.fillRect(note.x, note.y, 80, 80);
                 ctx.fillStyle = 'white';
-                ctx.fillText(note.text, note.x + 5, note.y + 30);
+                ctx.fillText(note.text, note.x + 5, note.y + 50);
             });
         }
 
@@ -170,9 +195,9 @@
         }
 
         function checkHit(instrumentId) {
-            const threshold = 550;
+            const threshold = 410;
             notes = notes.filter(note => {
-                if (note.y > threshold && note.y < threshold + 50 && note.id === instrumentId) {
+                if (note.y > threshold && note.y < threshold + 80 && note.id === instrumentId) {
                     playSound(note.text);
                     score += 10;
                     document.getElementById('score').textContent = '점수: ' + score;
@@ -189,13 +214,6 @@
                 alert('게임 종료! 최종 점수: ' + score);
             }
         }
-
-        instrumentElements.forEach(inst => {
-            inst.addEventListener('click', () => {
-                const id = inst.parentElement.id;
-                checkHit(id);
-            });
-        });
     </script>
 </body>
 </html>
