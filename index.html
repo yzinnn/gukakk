@@ -65,32 +65,32 @@
     </style>
 </head>
 <body>
-    <h1>리듬 게임</h1>
+    <h1>육보 리듬 게임</h1>
     <div id="inputForm">
         <label for="rythmInput">육보 입력:</label>
-        <input type="text" id="rythmInput" placeholder="예: 갠 지 덩 쿵 덕">
+        <textarea id="rythmInput" placeholder="예: 갠 지 덩 쿵 덕" rows="1" oninput="autoGrow(this)"></textarea>
         <button onclick="startGame()">시작</button>
     </div>
-    <canvas id="gameCanvas" width="320" height="480"></canvas>
+    <p id="score">점수: 0</p>
+    <canvas id="gameCanvas" width="320" height="360"></canvas>
     <div id="instrumentContainer">
         <div class="instrument" id="kkwaenggari">
-            <img src="Kkwaenggwari.jpg" alt="꽹가리">
+            <img src="kukak/Kkwaenggwari.jpg" alt="꽹가리">
             <p>꽹가리</p>
         </div>
         <div class="instrument" id="jing">
-            <img src="jing.jpeg" alt="징">
+            <img src="kukak/jing.jpeg" alt="징">
             <p>징</p>
         </div>
         <div class="instrument" id="buk">
-            <img src="buk.png" alt="북">
+            <img src="kukak/buk.png" alt="북">
             <p>북</p>
         </div>
         <div class="instrument" id="janggu">
-            <img src="janggu.jpg" alt="장구">
+            <img src="kukak/janggu.jpg" alt="장구">
             <p>장구</p>
         </div>
     </div>
-    <p id="score">점수: 0</p>
     <audio id="audio_kkwaenggwari_gan" src="Kkwaenggwari_gang_1.mp3" preload="auto"></audio>
     <audio id="audio_kkwaenggwari_ji" src="Kkwaenggwari_ji_1.mp3" preload="auto"></audio>
     <audio id="audio_jing_jing" src="jing_1.mp3" preload="auto"></audio>
