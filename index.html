@@ -185,4 +185,31 @@
                 case 'kkwaenggari': return 'purple';
                 case 'jing': return 'orange';
                 case 'buk': return 'skyblue';
-                case 'janggu': return 'pink'
+                case 'janggu': return 'pink';
+                default: return 'red';
+            }
+        }
+
+        function checkHit(instrumentId) {
+            const threshold = 410;
+            notes = notes.filter(note => {
+                if (note.y > threshold && note.y < threshold + 80 && note.id === instrumentId) {
+                    playSound(note.text);
+                    score += 10;
+                    document.getElementById('score').textContent = '점수: ' + score;
+                    return false;
+                }
+                return true;
+            });
+        }
+
+        function gameLoop() {
+            drawNotes();
+            if (notes.length === 0) {
+                clearInterval(gameInterval);
+                alert('게임 종료! 최종 점수: ' + score);
+            }
+        }
+    </script>
+</body>
+</html>
