@@ -44,15 +44,16 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            position: absolute;
-            top: 360px; /* 게임 캔버스 바로 아래에 위치 */
-            left: 50%;
-            transform: translateX(-50%);
+            margin-top: -20px; /* 게임 캔버스와의 간격을 더 줄이기 위해 음수 값 사용 */
         }
         .instrument {
             display: flex;
             flex-direction: column;
             align-items: center; /* 중앙 정렬 */
+        }
+        .instrument p.description {
+            font-size: 12px;
+            color: gray;
         }
         #score {
             margin-top: 5px;
@@ -61,10 +62,16 @@
         h1 {
             font-size: 20px;
         }
+        #instructions {
+            font-size: 14px;
+            color: red;
+            margin: 10px 0;
+        }
     </style>
 </head>
 <body>
     <h1>육보 리듬 게임</h1>
+    <p id="instructions">모든 음을 띄워쓰세요. 예: 갠 지 덩 쿵 덕</p>
     <div id="inputForm">
         <label for="rythmInput">육보 입력:</label>
         <textarea id="rythmInput" placeholder="예: 갠 지 덩 쿵 덕" rows="1" oninput="autoGrow(this)"></textarea>
@@ -76,18 +83,22 @@
         <div class="instrument" id="kkwaenggari">
             <img src="kukak/Kkwaenggwari.jpg" alt="꽹가리">
             <p>꽹가리</p>
+            <p class="description">갠=갱, 지</p>
         </div>
         <div class="instrument" id="jing">
             <img src="kukak/jing.jpeg" alt="징">
             <p>징</p>
+            <p class="description">징</p>
         </div>
         <div class="instrument" id="buk">
             <img src="kukak/buk.png" alt="북">
             <p>북</p>
+            <p class="description">둥, 두</p>
         </div>
         <div class="instrument" id="janggu">
             <img src="kukak/janggu.jpg" alt="장구">
             <p>장구</p>
+            <p class="description">덩, 기덕, 쿵, 더러러러, 덕</p>
         </div>
     </div>
     <audio id="audio_kkwaenggwari_gan" src="Kkwaenggwari_gang_1.mp3" preload="auto"></audio>
