@@ -44,14 +44,12 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            position: absolute;
-            top: 360px; /* 게임 캔버스 바로 아래에 위치 */
-            width: 100%;
+            margin-top: -20px; /* 게임 캔버스와의 간격을 더 줄이기 위해 음수 값 사용 */
         }
         .instrument {
             display: flex;
             flex-direction: column;
-            align-items: center; /* 오른쪽 정렬 */
+            align-items: center; /* 중앙 정렬 */
         }
         #score {
             margin-top: 5px;
