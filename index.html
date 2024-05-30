@@ -31,6 +31,7 @@
         #rythmInput {
             height: auto;
             overflow: auto;
+            width: 80%;
         }
         #gameCanvas {
             border: 1px solid #000;
@@ -112,6 +113,11 @@
     <audio id="audio_janggu_durururu" src="Janggu_durururu_1.mp3" preload="auto"></audio>
     <audio id="audio_janggu_duk" src="Janggu_duk_1.mp3" preload="auto"></audio>
     <script>
+        function autoGrow(element) {
+            element.style.height = "5px";
+            element.style.height = (element.scrollHeight)+"px";
+        }
+        
         const instrumentSounds = {
             kkwaenggari: {
                 '갠': document.getElementById('audio_kkwaenggwari_gan'),
@@ -216,6 +222,7 @@
                 return true;
             });
         }
+
         function gameLoop() {
             drawNotes();
             if (notes.length === 0) {
