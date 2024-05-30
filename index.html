@@ -82,42 +82,42 @@
     <canvas id="gameCanvas" width="320" height="360"></canvas>
     <div id="instrumentContainer">
         <div class="instrument" id="kkwaenggari">
-            <img src="kukak/Kkwaenggwari.jpg" alt="꽹가리">
+            <img src="images/Kkwaenggwari.jpg" alt="꽹가리">
             <p>꽹가리</p>
             <p class="description">갠=갱, 지</p>
         </div>
         <div class="instrument" id="jing">
-            <img src="kukak/jing.jpeg" alt="징">
+            <img src="images/jing.jpeg" alt="징">
             <p>징</p>
             <p class="description">징</p>
         </div>
         <div class="instrument" id="buk">
-            <img src="kukak/buk.png" alt="북">
+            <img src="images/buk.png" alt="북">
             <p>북</p>
             <p class="description">둥, 두</p>
         </div>
         <div class="instrument" id="janggu">
-            <img src="kukak/janggu.jpg" alt="장구">
+            <img src="images/janggu.jpg" alt="장구">
             <p>장구</p>
             <p class="description">덩, 기덕, 쿵, 더러러러, 덕</p>
         </div>
     </div>
-    <audio id="audio_kkwaenggwari_gan" src="Kkwaenggwari_gang_1.mp3" preload="auto"></audio>
-    <audio id="audio_kkwaenggwari_ji" src="Kkwaenggwari_ji_1.mp3" preload="auto"></audio>
-    <audio id="audio_jing_jing" src="jing_1.mp3" preload="auto"></audio>
-    <audio id="audio_buk_dung" src="buk_dung.mp3" preload="auto"></audio>
-    <audio id="audio_buk_du" src="buk_du.mp3" preload="auto"></audio>
-    <audio id="audio_janggu_dung" src="Janggu_dung_1.mp3" preload="auto"></audio>
-    <audio id="audio_janggu_giduk" src="Janggu_giduk_1.mp3" preload="auto"></audio>
-    <audio id="audio_janggu_kung" src="Janggu_kung_1.mp3" preload="auto"></audio>
-    <audio id="audio_janggu_durururu" src="Janggu_durururu_1.mp3" preload="auto"></audio>
-    <audio id="audio_janggu_duk" src="Janggu_duk_1.mp3" preload="auto"></audio>
+    <audio id="audio_kkwaenggwari_gan" src="audio/Kkwaenggwari_gang_1.mp3" preload="auto"></audio>
+    <audio id="audio_kkwaenggwari_ji" src="audio/Kkwaenggwari_ji_1.mp3" preload="auto"></audio>
+    <audio id="audio_jing_jing" src="audio/jing_1.mp3" preload="auto"></audio>
+    <audio id="audio_buk_dung" src="audio/buk_dung.mp3" preload="auto"></audio>
+    <audio id="audio_buk_du" src="audio/buk_du.mp3" preload="auto"></audio>
+    <audio id="audio_janggu_dung" src="audio/Janggu_dung_1.mp3" preload="auto"></audio>
+    <audio id="audio_janggu_giduk" src="audio/Janggu_giduk_1.mp3" preload="auto"></audio>
+    <audio id="audio_janggu_kung" src="audio/Janggu_kung_1.mp3" preload="auto"></audio>
+    <audio id="audio_janggu_durururu" src="audio/Janggu_durururu_1.mp3" preload="auto"></audio>
+    <audio id="audio_janggu_duk" src="audio/Janggu_duk_1.mp3" preload="auto"></audio>
     <script>
         function autoGrow(element) {
             element.style.height = "5px";
-            element.style.height = (element.scrollHeight)+"px";
+            element.style.height = (element.scrollHeight) + "px";
         }
-        
+
         const instrumentSounds = {
             kkwaenggari: {
                 '갠': document.getElementById('audio_kkwaenggwari_gan'),
@@ -189,8 +189,11 @@
 
         function drawNotes() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // 타점 선 그리기
             ctx.fillStyle = 'black';
-            ctx.fillRect(0, 410, canvas.width, 10);  // 타점 선을 그림 위로 0.7cm 이동
+            ctx.fillRect(0, 350, canvas.width, 10); // 350 위치에 타점 선 그리기
+            
             notes.forEach(note => {
                 note.y += 2;
                 ctx.fillStyle = noteColor(note.id);
@@ -211,7 +214,7 @@
         }
 
         function checkHit(instrumentId) {
-            const threshold = 410;
+            const threshold = 350;
             notes = notes.filter(note => {
                 if (note.y > threshold && note.y < threshold + 80 && note.id === instrumentId) {
                     playSound(note.text);
