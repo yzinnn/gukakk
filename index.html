@@ -13,7 +13,7 @@
             display: inline-block;
             margin: 0;
             position: relative;
-            text-align: center; /* 중앙으로 정렬 */
+            text-align: right; /* 오른쪽으로 정렬 */
         }
         .instrument img {
             width: 80px;
@@ -31,7 +31,6 @@
         #rythmInput {
             height: auto;
             overflow: auto;
-            width: 300px; /* 원래 크기로 돌아가기 위해 폭을 지정 */
         }
         #gameCanvas {
             border: 1px solid #000;
@@ -44,17 +43,17 @@
         #instrumentContainer {
             display: flex;
             justify-content: center;
-            align-items: center;
-            margin-top: -20px; /* 게임 캔버스와의 간격을 더 줄이기 위해 음수 값 사용 */
+            align-items: flex-end;
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 120px;
+            top: 240px;
         }
         .instrument {
             display: flex;
             flex-direction: column;
-            align-items: center; /* 중앙 정렬 */
-        }
-        .instrument p.description {
-            font-size: 12px;
-            color: gray;
+            align-items: flex-end; /* 오른쪽 정렬 */
         }
         #score {
             margin-top: 5px;
@@ -63,16 +62,10 @@
         h1 {
             font-size: 20px;
         }
-        #instructions {
-            font-size: 14px;
-            color: red;
-            margin: 10px 0;
-        }
     </style>
 </head>
 <body>
     <h1>육보 리듬 게임</h1>
-    <p id="instructions">모든 음을 띄워쓰세요. 예: 갠 지 덩 쿵 덕</p>
     <div id="inputForm">
         <label for="rythmInput">육보 입력:</label>
         <textarea id="rythmInput" placeholder="예: 갠 지 덩 쿵 덕" rows="1" oninput="autoGrow(this)"></textarea>
@@ -82,39 +75,35 @@
     <canvas id="gameCanvas" width="320" height="360"></canvas>
     <div id="instrumentContainer">
         <div class="instrument" id="kkwaenggari">
-            <img src="images/Kkwaenggwari.jpg" alt="꽹가리">
+            <img src="kukak/Kkwaenggwari.jpg" alt="꽹가리">
             <p>꽹가리</p>
-            <p class="description">갠=갱, 지</p>
         </div>
         <div class="instrument" id="jing">
-            <img src="images/jing.jpeg" alt="징">
+            <img src="kukak/jing.jpeg" alt="징">
             <p>징</p>
-            <p class="description">징</p>
         </div>
         <div class="instrument" id="buk">
-            <img src="images/buk.png" alt="북">
+            <img src="kukak/buk.png" alt="북">
             <p>북</p>
-            <p class="description">둥, 두</p>
         </div>
         <div class="instrument" id="janggu">
-            <img src="images/janggu.jpg" alt="장구">
+            <img src="kukak/janggu.jpg" alt="장구">
             <p>장구</p>
-            <p class="description">덩, 기덕, 쿵, 더러러러, 덕</p>
         </div>
     </div>
-    <audio id="audio_kkwaenggwari_gan" src="audio/Kkwaenggwari_gang_1.mp3" preload="auto"></audio>
-    <audio id="audio_kkwaenggwari_ji" src="audio/Kkwaenggwari_ji_1.mp3" preload="auto"></audio>
-    <audio id="audio_jing_jing" src="audio/jing_1.mp3" preload="auto"></audio>
-    <audio id="audio_buk_dung" src="audio/buk_dung.mp3" preload="auto"></audio>
-    <audio id="audio_buk_du" src="audio/buk_du.mp3" preload="auto"></audio>
-    <audio id="audio_janggu_dung" src="audio/Janggu_dung_1.mp3" preload="auto"></audio>
-    <audio id="audio_janggu_giduk" src="audio/Janggu_giduk_1.mp3" preload="auto"></audio>
-    <audio id="audio_janggu_kung" src="audio/Janggu_kung_1.mp3" preload="auto"></audio>
-    <audio id="audio_janggu_durururu" src="audio/Janggu_durururu_1.mp3" preload="auto"></audio>
-    <audio id="audio_janggu_duk" src="audio/Janggu_duk_1.mp3" preload="auto"></audio>
+    <audio id="audio_kkwaenggwari_gan" src="kukak/Kkwaenggwari_gan_1.mp3"></audio>
+    <audio id="audio_kkwaenggwari_ji" src="kukak/Kkwaenggwari_ji_1.mp3"></audio>
+    <audio id="audio_jing_jing" src="kukak/jing_1.mp3"></audio>
+    <audio id="audio_buk_dung" src="kukak/buk_dung.mp3"></audio>
+    <audio id="audio_buk_du" src="kukak/buk_du.mp3"></audio>
+    <audio id="audio_janggu_dung" src="kukak/janggu_dung_1.mp3"></audio>
+    <audio id="audio_janggu_giduk" src="kukak/janggu_giduk_1.mp3"></audio>
+    <audio id="audio_janggu_kung" src="kukak/janggu_kung_1.mp3"></audio>
+    <audio id="audio_janggu_durururu" src="kukak/janggu_durururu_1.mp3"></audio>
+    <audio id="audio_janggu_duk" src="kukak/janggu_duk_1.mp3"></audio>
     <script>
         function autoGrow(element) {
-            element.style.height = "5px";
+            element.style.height = "auto";
             element.style.height = (element.scrollHeight) + "px";
         }
 
@@ -180,20 +169,17 @@
         }
 
         function playSound(note) {
-            for (const instrument in instrumentSounds) {
-                if (instrumentSounds[instrument][note]) {
-                    instrumentSounds[instrument][note].play();
-                }
+            const sound = instrumentSounds[noteToInstrument(note)][note];
+            if (sound) {
+                sound.currentTime = 0; // play from start
+                sound.play().catch(error => console.error(`Error playing sound: ${error}`));
             }
         }
 
         function drawNotes() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
-            // 타점 선 그리기
             ctx.fillStyle = 'black';
-            ctx.fillRect(0, 350, canvas.width, 10); // 350 위치에 타점 선 그리기
-            
+            ctx.fillRect(0, 250, canvas.width, 5);  // 타점 선을 더 위로 이동
             notes.forEach(note => {
                 note.y += 2;
                 ctx.fillStyle = noteColor(note.id);
@@ -214,7 +200,7 @@
         }
 
         function checkHit(instrumentId) {
-            const threshold = 350;
+            const threshold = 250;
             notes = notes.filter(note => {
                 if (note.y > threshold && note.y < threshold + 80 && note.id === instrumentId) {
                     playSound(note.text);
@@ -230,7 +216,9 @@
             drawNotes();
             if (notes.length === 0) {
                 clearInterval(gameInterval);
-                alert('게임 종료! 최종 점수: ' + score);
+                setTimeout(() => {
+                    alert('게임 종료! 최종 점수: ' + score);
+                }, 100); // 0.1초 후에 alert 호출
             }
         }
     </script>
