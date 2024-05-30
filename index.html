@@ -189,11 +189,8 @@
 
         function drawNotes() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
-            // 타점 선 그리기
             ctx.fillStyle = 'black';
-            ctx.fillRect(0, 350, canvas.width, 10); // 350 위치에 타점 선 그리기
-            
+            ctx.fillRect(0, 410, canvas.width, 10);  // 타점 선을 그림 위로 0.7cm 이동
             notes.forEach(note => {
                 note.y += 2;
                 ctx.fillStyle = noteColor(note.id);
@@ -214,7 +211,7 @@
         }
 
         function checkHit(instrumentId) {
-            const threshold = 350;
+            const threshold = 410;
             notes = notes.filter(note => {
                 if (note.y > threshold && note.y < threshold + 80 && note.id === instrumentId) {
                     playSound(note.text);
