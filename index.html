@@ -39,12 +39,15 @@
             position: relative;
             width: 320px;
             height: 360px;
-        }
+        }        
         #instrumentContainer {
             display: flex;
             justify-content: center;
             align-items: center;
-            margin-top: -70px; /* 게임 캔버스와의 간격을 더 줄이기 위해 음수 값 사용 */
+            position: absolute;
+            top: 360px; /* 게임 캔버스 바로 아래에 위치 */
+            left: 50%;
+            transform: translateX(-50%);
         }
         .instrument {
             display: flex;
